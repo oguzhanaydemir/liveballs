@@ -1,0 +1,21 @@
+{
+  "name": "liveballs",
+  "description": "",
+  "main": "",
+  "authors": [
+    "oguzhanaydemir <ouzhanaydemir7@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/oguzhanaydemir/liveballs",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.7.5",
+    "semantic": "^2.4.1"
+  }
+}
