@@ -3,15 +3,14 @@ app.controller("indexController", [
   ($scope, indexFactory) => {
     $scope.messages = [];
     $scope.init = () => {
-      let username;
-      let usernameControl = false;
-      while (!usernameControl) {
-        username = prompt('Please enter a username');
-        if (username)
-          usernameControl = true;
-      }
+      const username = prompt('Please enter a username');
 
-      initSocket(username);
+      if (username)
+        initSocket(username);
+      else
+        return false;
+
+
     }
 
 
@@ -25,10 +24,24 @@ app.controller("indexController", [
       indexFactory.connectSocket('http://localhost:3000', connectionOptions)
         .then((socket) => {
           socket.emit('newUser', { username });
-          socket.on('newUser', (data) => {
+          socket.on('newUser', (user) => {
             $scope.messages.push({
-              type: 0, // return to info by server
-              username: data.username
+              type: {
+                code: 0, //server or user? (server:0, user:1)
+                message: 1 // connect
+              },
+              username: user.username
+            });
+            $scope.$apply();
+          });
+
+          socket.on('disUser', user => {
+            $scope.messages.push({
+              type: {
+                code: 0,   // server
+                message: 0 // disconnect
+              },
+              username: user.username
             });
             $scope.$apply();
           });
