@@ -19,26 +19,13 @@ block content
                 span.name B
                 .message this is awesome
           .ui.items.chat
-            .item
-              .content
-                a.header.name O
+            .item(ng-repeat="message in messages")
+              .content(ng-if="!message.type")
+                span [SERVER] &nbsp; : &nbsp;
+                a.header.name {{message.username}} &nbsp;
                 .description.message
-                  | Selam
-            .item
-              .content
-                a.header.name Y
-                .description.message
-                  | selam nasılsın :)
-            .item
-              .content
-                a.header.name B
-                .description.message
-                  | this is awesome
-            .item
-              .content
-                a.header.name S
-                .description.message
-                  | hey
+                  | katıldı
+            
           .ui.action.input.fluid
             input(type='text', placeholder='Type here...')
             button.ui.button Send
