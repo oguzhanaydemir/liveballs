@@ -35,7 +35,7 @@ app.controller("indexController", [
             });
             $scope.$apply();
           });
-          
+
           socket.on('initPlayers', players => {
             $scope.players = players;
             $scope.$apply();
@@ -51,6 +51,11 @@ app.controller("indexController", [
             });
             $scope.$apply();
           });
+
+          $scope.OnClickPlayer = ($event) => {
+            $('#' + socket.id).animate({ left: $event.offsetX, top: $event.offsetY });
+          }
+
         })
         .catch((err) => {
           console.log(err);
