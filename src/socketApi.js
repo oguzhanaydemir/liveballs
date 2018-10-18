@@ -27,6 +27,18 @@ io.on('connection', (socket) => {
         socket.emit('initPlayers', users);
     });
 
+    socket.on('animate', position => {
+        users[socket.id].position.x = position.x;
+        users[socket.id].position.y = position.y;
+
+        socket.broadcast.emit('animate', {
+            socketId: socket.id,
+            x: position.x,
+            y: position.y,
+        });
+
+    });
+
     socket.on('disconnect', () => {
         socket.broadcast.emit('disUser', (users[socket.id]));
         delete users[socket.id];

@@ -1,31 +1,27 @@
 app.controller("indexController", [
-  "$scope", "indexFactory",
+  "$scope",
+  "indexFactory",
   ($scope, indexFactory) => {
     $scope.messages = [];
     $scope.players = {};
     $scope.init = () => {
-      const username = prompt('Please enter a username');
+      const username = prompt("Please enter a username");
 
-      if (username)
-        initSocket(username);
-      else
-        return false;
-
-
-    }
-
+      if (username) initSocket(username);
+      else return false;
+    };
 
     function initSocket(username) {
-
       const connectionOptions = {
         reconnectionAttempts: 3,
         reconnectionDelay: 600
       };
 
-      indexFactory.connectSocket('http://localhost:3000', connectionOptions)
-        .then((socket) => {
-          socket.emit('newUser', { username });
-          socket.on('newUser', (user) => {
+      indexFactory
+        .connectSocket("http://localhost:3000", connectionOptions)
+        .then(socket => {
+          socket.emit("newUser", { username });
+          socket.on("newUser", user => {
             $scope.messages.push({
               type: {
                 code: 0, //server or user? (server:0, user:1)
@@ -37,15 +33,15 @@ app.controller("indexController", [
             $scope.$apply();
           });
 
-          socket.on('initPlayers', players => {
+          socket.on("initPlayers", players => {
             $scope.players = players;
             $scope.$apply();
           });
 
-          socket.on('disUser', user => {
+          socket.on("disUser", user => {
             const messageData = {
               type: {
-                code: 0,   // server
+                code: 0, // server
                 message: 0 // disconnect
               },
               username: user.username
@@ -55,12 +51,20 @@ app.controller("indexController", [
             $scope.$apply();
           });
 
-          $scope.OnClickPlayer = ($event) => {
-            $('#' + socket.id).animate({ left: $event.offsetX, top: $event.offsetY });
-          }
+          $scope.OnClickPlayer = $event => {
+            let x = $event.offsetX;
+            let y = $event.offsetY;
 
+            $("#" + socket.id).animate({ left: x, top: y });
+
+            socket.emit("animate", { x, y });
+          };
+
+          socket.on("animate", data => {
+            $("#" + data.socketId).animate({ left: data.x, top: data.y });
+          });
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     }
