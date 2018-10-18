@@ -33,6 +33,7 @@ app.controller("indexController", [
               },
               username: user.username
             });
+            $scope.players[user.id] = user;
             $scope.$apply();
           });
 
@@ -42,13 +43,15 @@ app.controller("indexController", [
           });
 
           socket.on('disUser', user => {
-            $scope.messages.push({
+            const messageData = {
               type: {
                 code: 0,   // server
                 message: 0 // disconnect
               },
               username: user.username
-            });
+            };
+            $scope.messages.push(messageData);
+            delete $scope.players[user.id];
             $scope.$apply();
           });
 
