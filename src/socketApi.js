@@ -3,8 +3,10 @@ const io = socketIO();
 
 const socketApi = {};
 socketApi.io = io;
-
 const users = {};
+
+//Random Color Assignment
+const color = require('../helpers/randomColor');
 
 io.on('connection', (socket) => {
     console.log('a user connected');
@@ -14,8 +16,9 @@ io.on('connection', (socket) => {
             id: socket.id,
             position: {
                 x: 0,
-                y: 0
-            }
+                y: 0,
+            },
+            color: color(),
         };
 
         const userData = Object.assign(data, defaultData);
