@@ -70,15 +70,20 @@ app.controller("indexController", [
             let message = $scope.message;
 
             const messageData = {
-              type:{
-                  code:1,
+              type: {
+                code: 1,
               },
               username,
-              text : message,
+              text: message,
             }
             $scope.messages.push(messageData);
             $scope.message = "";
-            //socket.emit('newMessage', messageData);
+
+            setTimeout(() => {
+              const element = document.getElementById("chat-area");
+              element.scrollTop = element.scrollHeight;
+            });
+
           }
 
         })
