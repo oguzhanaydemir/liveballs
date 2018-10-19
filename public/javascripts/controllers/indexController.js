@@ -11,6 +11,13 @@ app.controller("indexController", [
       else return false;
     };
 
+    function scrollTop() {
+      setTimeout(() => {
+        const element = document.getElementById("chat-area");
+        element.scrollTop = element.scrollHeight;
+      });
+    }
+
     function initSocket(username) {
       const connectionOptions = {
         reconnectionAttempts: 3,
@@ -66,6 +73,12 @@ app.controller("indexController", [
             $("#" + data.socketId).animate({ left: data.x, top: data.y });
           });
 
+          socket.on('newMessage', message => {
+            $scope.messages.push(message);
+            $scope.$apply();
+            scrollTop();
+          });
+
           $scope.newMessage = () => {
             let message = $scope.message;
 
@@ -79,10 +92,10 @@ app.controller("indexController", [
             $scope.messages.push(messageData);
             $scope.message = "";
 
-            setTimeout(() => {
-              const element = document.getElementById("chat-area");
-              element.scrollTop = element.scrollHeight;
-            });
+            scrollTop();
+
+
+            socket.emit('newMessage', messageData);
 
           }
 
