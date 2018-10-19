@@ -20,7 +20,9 @@ app.controller("indexController", [
       indexFactory
         .connectSocket("http://localhost:3000", connectionOptions)
         .then(socket => {
+
           socket.emit("newUser", { username });
+
           socket.on("newUser", user => {
             $scope.messages.push({
               type: {
@@ -63,6 +65,22 @@ app.controller("indexController", [
           socket.on("animate", data => {
             $("#" + data.socketId).animate({ left: data.x, top: data.y });
           });
+
+          $scope.newMessage = () => {
+            let message = $scope.message;
+
+            const messageData = {
+              type:{
+                  code:1,
+              },
+              username,
+              text : message,
+            }
+            $scope.messages.push(messageData);
+            $scope.message = "";
+            //socket.emit('newMessage', messageData);
+          }
+
         })
         .catch(err => {
           console.log(err);
