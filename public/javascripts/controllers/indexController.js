@@ -1,7 +1,8 @@
 app.controller("indexController", [
   "$scope",
   "indexFactory",
-  ($scope, indexFactory) => {
+  "configFactory",
+  ($scope, indexFactory, configFactory) => {
     $scope.messages = [];
     $scope.players = {};
     $scope.init = () => {
@@ -34,7 +35,8 @@ app.controller("indexController", [
       };
 
       try {
-        const socket = await indexFactory.connectSocket("http://localhost:3000", connectionOptions);
+        const socketEnv = await configFactory.getConfig();
+        const socket = await indexFactory.connectSocket(socketEnv.data.socketUrl, connectionOptions);
 
         socket.emit("newUser", { username });
 
