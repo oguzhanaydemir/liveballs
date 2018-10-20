@@ -31,14 +31,19 @@ io.on("connection", socket => {
     });
 
     socket.on("animate", position => {
-        users[socket.id].position.x = position.x;
-        users[socket.id].position.y = position.y;
+        try {
+            users[socket.id].position.x = position.x;
+            users[socket.id].position.y = position.y;
 
-        socket.broadcast.emit("animate", {
-            socketId: socket.id,
-            x: position.x,
-            y: position.y
-        });
+            socket.broadcast.emit("animate", {
+                socketId: socket.id,
+                x: position.x,
+                y: position.y
+            });
+        } catch (e) {
+            console.log(e);
+        }
+
     });
 
     socket.on("disconnect", () => {

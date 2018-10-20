@@ -49,6 +49,7 @@ app.controller("indexController", [
             });
             $scope.players[user.id] = user;
             $scope.$apply();
+            scrollTop();
           });
 
           socket.on("initPlayers", players => {
@@ -67,6 +68,7 @@ app.controller("indexController", [
             $scope.messages.push(messageData);
             delete $scope.players[user.id];
             $scope.$apply();
+            scrollTop();
           });
 
           $scope.OnClickPlayer = $event => {
